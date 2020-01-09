@@ -21,12 +21,13 @@
 Summary: OpenIB Mellanox InfiniBand Diagnostic Tools
 Name: ibutils
 Version: 1.5.7
-Release: 9%{?dist}
+Release: 10%{?dist}
 License: GPLv2 or BSD
 Url: http://www.openfabrics.org/
 Group: System Environment/Libraries
 Source: http://www.openfabrics.org/downloads/%{name}/%{name}-%{version}-0.2.gbd7e502.tar.gz
 Patch1: ibutils-1.5.7-output.patch
+Patch2: add-ibdev2netdev.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: tcl, tk, swig, graphviz-tcl
 Requires: ibutils-libs = %{version}-%{release}
@@ -52,6 +53,7 @@ the Mellanox Infiniband diagnostic utilities libraries
 %prep
 %setup -q
 %patch1 -p1
+%patch2
 #./autogen.sh
 %configure --with-osm=%{_prefix} --enable-ibmgtsim --disable-rpath CXXFLAGS="$CXXFLAGS -fno-strict-aliasing -fPIC"
 
@@ -72,6 +74,7 @@ chrpath -d %{buildroot}%{_bindir}/ib{mssh,nlparse,dmsh,topodiff,is,msquit,dmtr,d
 chrpath -d %{buildroot}%{_libdir}/libib{sysapi,dm}.so.1.[01].[01]
 chrpath -d %{buildroot}%{_libdir}/*/libib{dm,is}.so.1.5.7
 mkdir -p %{buildroot}/var/cache/ibutils
+install -m 0755 ibdev2netdev %{buildroot}%{_bindir}
 
 %clean
 [ ! -z "%{buildroot}" ] && rm -fr %{buildroot}
@@ -99,6 +102,7 @@ mkdir -p %{buildroot}/var/cache/ibutils
 %{_bindir}/ibmsquit
 %{_bindir}/RunSimTest
 %{_bindir}/IBMgtSim
+%{_bindir}/ibdev2netdev
 %{_datadir}/ibmgtsim
 %{_mandir}/*/*
 
@@ -134,6 +138,10 @@ mkdir -p %{buildroot}/var/cache/ibutils
 %{_includedir}/ibmgtsim
 
 %changelog
+* Fri Oct  7 2016 Honggang Li <honli@redhat.com> - 1.5.7-10
+- Add script ibdev2netdev
+- Resolves: bz1238969
+
 * Wed Jun 18 2014 Doug Ledford <dledford@redhat.com> - 1.5.7-9
 - We built a new opensm against a new libibumad and libibmad
   to resolve a bug.  So we need to rebuild this to be against
