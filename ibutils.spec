@@ -21,17 +21,17 @@
 Summary: OpenIB Mellanox InfiniBand Diagnostic Tools
 Name: ibutils
 Version: 1.5.7
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPLv2 or BSD
 Url: http://www.openfabrics.org/
 Group: System Environment/Libraries
-Source: http://www.openfabrics.org/downloads/%{name}/%{name}-%{version}.tar.gz
+Source: http://www.openfabrics.org/downloads/%{name}/%{name}-%{version}-0.2.gbd7e502.tar.gz
 Patch1: ibutils-1.5.7-output.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: tcl, tk, swig, graphviz-tcl
 Requires: ibutils-libs = %{version}-%{release}
-BuildRequires: libibverbs-devel >= 1.1, opensm-devel >= 3.3.13, tcl-devel, swig, tk-devel, libibumad-devel, autoconf, graphviz-tcl, chrpath
-ExclusiveArch: %{ix86} x86_64 ppc ppc64 ia64
+BuildRequires: libibverbs-devel >= 1.1.8, opensm-devel >= 3.3.17, tcl-devel, swig, tk-devel, libibumad-devel, autoconf, graphviz-tcl, chrpath
+ExcludeArch: s390 s390x
 %description 
 ibutils provides IB network and path diagnostics.
 
@@ -134,6 +134,15 @@ mkdir -p %{buildroot}/var/cache/ibutils
 %{_includedir}/ibmgtsim
 
 %changelog
+* Wed Jun 18 2014 Doug Ledford <dledford@redhat.com> - 1.5.7-9
+- We built a new opensm against a new libibumad and libibmad
+  to resolve a bug.  So we need to rebuild this to be against
+  the new libs.  Updated to latest upstream since we had to
+  rebuild anyway and it's often needed to make it compatible
+  with the minor changes in libibumad and libibmad and
+  opensm-libs
+- Related: bz1082730
+
 * Wed Aug 28 2013 Jay Fenlason <fenlason@redhat.com> 1.5.7-8
 - Add the -output patch to have programs use /var/cache/ibutils
   instead of /tmp
