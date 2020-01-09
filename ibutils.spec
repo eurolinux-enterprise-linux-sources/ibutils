@@ -21,7 +21,7 @@
 Summary: OpenIB Mellanox InfiniBand Diagnostic Tools
 Name: ibutils
 Version: 1.5.7
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2 or BSD
 Url: http://www.openfabrics.org/
 Group: System Environment/Libraries
@@ -130,6 +130,10 @@ chrpath -d %{buildroot}%{_libdir}/*/libib{dm,is}.so.1.5.7
 %{_includedir}/ibmgtsim
 
 %changelog
+* Mon Oct 15 2012 Doug Ledford <dledford@redhat.com> - 1.5.7-7
+- Bump and rebuild against latest opensm
+- Related: bz756396
+
 * Wed Feb 29 2012 Doug Ledford <dledford@redhat.com> - 1.5.7-6
 - Bump and rebuild against updated opensm
 - Related: bz754196
