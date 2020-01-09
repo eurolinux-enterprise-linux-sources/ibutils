@@ -21,11 +21,12 @@
 Summary: OpenIB Mellanox InfiniBand Diagnostic Tools
 Name: ibutils
 Version: 1.5.7
-Release: 7%{?dist}
+Release: 8%{?dist}
 License: GPLv2 or BSD
 Url: http://www.openfabrics.org/
 Group: System Environment/Libraries
 Source: http://www.openfabrics.org/downloads/%{name}/%{name}-%{version}.tar.gz
+Patch1: ibutils-1.5.7-output.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: tcl, tk, swig, graphviz-tcl
 Requires: ibutils-libs = %{version}-%{release}
@@ -50,6 +51,7 @@ the Mellanox Infiniband diagnostic utilities libraries
 
 %prep
 %setup -q
+%patch1 -p1
 #./autogen.sh
 %configure --with-osm=%{_prefix} --enable-ibmgtsim --disable-rpath CXXFLAGS="$CXXFLAGS -fno-strict-aliasing -fPIC"
 
@@ -69,6 +71,7 @@ find %{buildroot} -name \*.la -delete
 chrpath -d %{buildroot}%{_bindir}/ib{mssh,nlparse,dmsh,topodiff,is,msquit,dmtr,dmchk}
 chrpath -d %{buildroot}%{_libdir}/libib{sysapi,dm}.so.1.[01].[01]
 chrpath -d %{buildroot}%{_libdir}/*/libib{dm,is}.so.1.5.7
+mkdir -p %{buildroot}/var/cache/ibutils
 
 %clean
 [ ! -z "%{buildroot}" ] && rm -fr %{buildroot}
@@ -101,6 +104,7 @@ chrpath -d %{buildroot}%{_libdir}/*/libib{dm,is}.so.1.5.7
 
 %files libs
 %defattr(-,root,root)
+%dir /var/cache/ibutils
 %{_libdir}/libibdmcom.so.*
 %{_libdir}/libibdm.so.*
 %{_libdir}/libibmscli.so.*
@@ -130,6 +134,11 @@ chrpath -d %{buildroot}%{_libdir}/*/libib{dm,is}.so.1.5.7
 %{_includedir}/ibmgtsim
 
 %changelog
+* Wed Aug 28 2013 Jay Fenlason <fenlason@redhat.com> 1.5.7-8
+- Add the -output patch to have programs use /var/cache/ibutils
+  instead of /tmp
+  Resolves: bz958569
+
 * Mon Oct 15 2012 Doug Ledford <dledford@redhat.com> - 1.5.7-7
 - Bump and rebuild against latest opensm
 - Related: bz756396
