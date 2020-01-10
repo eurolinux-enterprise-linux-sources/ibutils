@@ -21,7 +21,7 @@
 Summary: OpenIB Mellanox InfiniBand Diagnostic Tools
 Name: ibutils
 Version: 1.5.7
-Release: 13%{?dist}
+Release: 14%{?dist}
 License: GPLv2 or BSD
 Url: http://www.openfabrics.org/
 Group: System Environment/Libraries
@@ -30,7 +30,7 @@ Patch1: ibutils-1.5.7-output.patch
 Patch2: add-ibdev2netdev.patch
 Requires: tcl, tk, swig, graphviz-tcl
 Requires: ibutils-libs = %{version}-%{release}
-BuildRequires: libibverbs-devel >= 1.2.0, opensm-devel > 3.3.17, tcl-devel, swig, tk-devel, libibumad-devel, autoconf, graphviz-tcl, chrpath
+BuildRequires: libibverbs-devel >= 1.2.0, opensm-devel >= 3.3.21, tcl-devel, swig, tk-devel, libibumad-devel, autoconf, graphviz-tcl, chrpath
 ExcludeArch: s390
 %description 
 ibutils provides IB network and path diagnostics.
@@ -137,6 +137,10 @@ install -m 0755 ibdev2netdev %{buildroot}%{_bindir}
 %{_includedir}/ibmgtsim
 
 %changelog
+* Mon Jan 21 2019 Honggang Li <honli@redhat.com> - 1.5.7-14
+- Rebuild with opensm-3.3.21
+- Resolves: bz1653664
+
 * Sun Jun 12 2016 Honggang Li <honli@redhat.com> - 1.5.7-13
 - Build ibutils for s390x
 - Add script ibdev2netdev
