@@ -21,17 +21,17 @@
 Summary: OpenIB Mellanox InfiniBand Diagnostic Tools
 Name: ibutils
 Version: 1.5.7
-Release: 14%{?dist}
+Release: 8%{?dist}
 License: GPLv2 or BSD
 Url: http://www.openfabrics.org/
 Group: System Environment/Libraries
-Source: http://www.openfabrics.org/downloads/%{name}/%{name}-%{version}-0.2.gbd7e502.tar.gz
+Source: http://www.openfabrics.org/downloads/%{name}/%{name}-%{version}.tar.gz
 Patch1: ibutils-1.5.7-output.patch
-Patch2: add-ibdev2netdev.patch
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: tcl, tk, swig, graphviz-tcl
 Requires: ibutils-libs = %{version}-%{release}
-BuildRequires: libibverbs-devel >= 1.2.0, opensm-devel >= 3.3.21, tcl-devel, swig, tk-devel, libibumad-devel, autoconf, graphviz-tcl, chrpath
-ExcludeArch: s390
+BuildRequires: libibverbs-devel >= 1.1, opensm-devel >= 3.3.13, tcl-devel, swig, tk-devel, libibumad-devel, autoconf, graphviz-tcl, chrpath
+ExclusiveArch: %{ix86} x86_64 ppc ppc64 ia64
 %description 
 ibutils provides IB network and path diagnostics.
 
@@ -52,7 +52,6 @@ the Mellanox Infiniband diagnostic utilities libraries
 %prep
 %setup -q
 %patch1 -p1
-%patch2
 #./autogen.sh
 %configure --with-osm=%{_prefix} --enable-ibmgtsim --disable-rpath CXXFLAGS="$CXXFLAGS -fno-strict-aliasing -fPIC"
 
@@ -73,7 +72,6 @@ chrpath -d %{buildroot}%{_bindir}/ib{mssh,nlparse,dmsh,topodiff,is,msquit,dmtr,d
 chrpath -d %{buildroot}%{_libdir}/libib{sysapi,dm}.so.1.[01].[01]
 chrpath -d %{buildroot}%{_libdir}/*/libib{dm,is}.so.1.5.7
 mkdir -p %{buildroot}/var/cache/ibutils
-install -m 0755 ibdev2netdev %{buildroot}%{_bindir}
 
 %clean
 [ ! -z "%{buildroot}" ] && rm -fr %{buildroot}
@@ -101,7 +99,6 @@ install -m 0755 ibdev2netdev %{buildroot}%{_bindir}
 %{_bindir}/ibmsquit
 %{_bindir}/RunSimTest
 %{_bindir}/IBMgtSim
-%{_bindir}/ibdev2netdev
 %{_datadir}/ibmgtsim
 %{_mandir}/*/*
 
@@ -137,32 +134,6 @@ install -m 0755 ibdev2netdev %{buildroot}%{_bindir}
 %{_includedir}/ibmgtsim
 
 %changelog
-* Mon Jan 21 2019 Honggang Li <honli@redhat.com> - 1.5.7-14
-- Rebuild with opensm-3.3.21
-- Resolves: bz1653664
-
-* Sun Jun 12 2016 Honggang Li <honli@redhat.com> - 1.5.7-13
-- Build ibutils for s390x
-- Add script ibdev2netdev
-- Resolves: bz1255790, bz1237004
-
-* Tue Oct 28 2014 Doug Ledford <dledford@redhat.com> - 1.5.7-12
-- Change ExclusiveArch to ExcludeArch instead so we don't have
-  the same problem again in the future
-- Update to the git repo tarball that we shipped in rhel6.6
-- Related: bz1123998
-
-* Wed Sep 10 2014 Yaakov Selkowitz <yselkowi@redhat.com> - 1.5.7-11
-- Enable on aarch64
-- Resolves: #1068829
-
-* Tue Sep 09 2014 Dan Horák <dhorak@redhat.com> - 1.5.7-10
-- enable on ppc64le
-- Resolves: #1123998
-
-* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.5.7-9
-- Mass rebuild 2013-12-27
-
 * Wed Aug 28 2013 Jay Fenlason <fenlason@redhat.com> 1.5.7-8
 - Add the -output patch to have programs use /var/cache/ibutils
   instead of /tmp

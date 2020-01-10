@@ -36,11 +36,11 @@
 Summary: OpenIB Mellanox InfiniBand Diagnostic Tools
 Name: ibutils
 Version: 1.5.7
-Release: 0.2.gbd7e502
+Release: 1
 License: GPL/BSD
 Url: http://openfabrics.org/downloads/%{name}-%{version}.tar.gz
 Group: System Environment/Libraries
-Source: http://www.openfabrics.org/downloads/ibutils-1.5.7-0.2.gbd7e502.tar.gz
+Source: http://www.openfabrics.org/downloads/ibutils-1.5.7.tar.gz
 BuildRoot: %{?build_root:%{build_root}}%{!?build_root:%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)}
 Requires: opensm-libs, libibumad, tk
 BuildRequires: opensm-devel, libibumad-devel
