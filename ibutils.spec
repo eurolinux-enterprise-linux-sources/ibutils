@@ -21,7 +21,7 @@
 Summary: OpenIB Mellanox InfiniBand Diagnostic Tools
 Name: ibutils
 Version: 1.5.7
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPLv2 or BSD
 Url: http://www.openfabrics.org/
 Group: System Environment/Libraries
@@ -134,6 +134,9 @@ mkdir -p %{buildroot}/var/cache/ibutils
 %{_includedir}/ibmgtsim
 
 %changelog
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.5.7-9
+- Mass rebuild 2013-12-27
+
 * Wed Aug 28 2013 Jay Fenlason <fenlason@redhat.com> 1.5.7-8
 - Add the -output patch to have programs use /var/cache/ibutils
   instead of /tmp
