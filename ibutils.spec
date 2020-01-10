@@ -21,17 +21,17 @@
 Summary: OpenIB Mellanox InfiniBand Diagnostic Tools
 Name: ibutils
 Version: 1.5.7
-Release: 12%{?dist}
+Release: 13%{?dist}
 License: GPLv2 or BSD
 Url: http://www.openfabrics.org/
 Group: System Environment/Libraries
 Source: http://www.openfabrics.org/downloads/%{name}/%{name}-%{version}-0.2.gbd7e502.tar.gz
 Patch1: ibutils-1.5.7-output.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+Patch2: add-ibdev2netdev.patch
 Requires: tcl, tk, swig, graphviz-tcl
 Requires: ibutils-libs = %{version}-%{release}
-BuildRequires: libibverbs-devel >= 1.1, opensm-devel > 3.3.17, tcl-devel, swig, tk-devel, libibumad-devel, autoconf, graphviz-tcl, chrpath
-ExcludeArch: s390 s390x
+BuildRequires: libibverbs-devel >= 1.2.0, opensm-devel > 3.3.17, tcl-devel, swig, tk-devel, libibumad-devel, autoconf, graphviz-tcl, chrpath
+ExcludeArch: s390
 %description 
 ibutils provides IB network and path diagnostics.
 
@@ -52,6 +52,7 @@ the Mellanox Infiniband diagnostic utilities libraries
 %prep
 %setup -q
 %patch1 -p1
+%patch2
 #./autogen.sh
 %configure --with-osm=%{_prefix} --enable-ibmgtsim --disable-rpath CXXFLAGS="$CXXFLAGS -fno-strict-aliasing -fPIC"
 
@@ -72,6 +73,7 @@ chrpath -d %{buildroot}%{_bindir}/ib{mssh,nlparse,dmsh,topodiff,is,msquit,dmtr,d
 chrpath -d %{buildroot}%{_libdir}/libib{sysapi,dm}.so.1.[01].[01]
 chrpath -d %{buildroot}%{_libdir}/*/libib{dm,is}.so.1.5.7
 mkdir -p %{buildroot}/var/cache/ibutils
+install -m 0755 ibdev2netdev %{buildroot}%{_bindir}
 
 %clean
 [ ! -z "%{buildroot}" ] && rm -fr %{buildroot}
@@ -99,6 +101,7 @@ mkdir -p %{buildroot}/var/cache/ibutils
 %{_bindir}/ibmsquit
 %{_bindir}/RunSimTest
 %{_bindir}/IBMgtSim
+%{_bindir}/ibdev2netdev
 %{_datadir}/ibmgtsim
 %{_mandir}/*/*
 
@@ -134,6 +137,11 @@ mkdir -p %{buildroot}/var/cache/ibutils
 %{_includedir}/ibmgtsim
 
 %changelog
+* Sun Jun 12 2016 Honggang Li <honli@redhat.com> - 1.5.7-13
+- Build ibutils for s390x
+- Add script ibdev2netdev
+- Resolves: bz1255790, bz1237004
+
 * Tue Oct 28 2014 Doug Ledford <dledford@redhat.com> - 1.5.7-12
 - Change ExclusiveArch to ExcludeArch instead so we don't have
   the same problem again in the future
